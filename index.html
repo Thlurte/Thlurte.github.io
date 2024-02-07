@@ -29,7 +29,7 @@
 
 <body>
     <header>
-        <h2>t</h2>
+        <h2>thlurte</h2>
         <nav>
             <a class="darkerText" href="https://github.com/thlurte" target="_blank">GitHub</a>
             <a class="darkerText" href="https://www.linkedin.com/in/thlurte/" target="_blank">LinkedIn</a>
@@ -39,39 +39,127 @@
         <section>
 
             <div class="nameContainer">
+                <canvas id="canvas"></canvas>
 
-                <h1>thlurte</h1>
-                <p class="darkerText">building autonomous structures</p>
+                <script>
+                    canvas.width=window.innerWidth;
+                    canvas.height=window.innerHeight;
+        
+                    const ctx=canvas.getContext('2d')
+                    const bottomLeft={x:0,y:canvas.height};
+                    const bottomRight={x:canvas.width,y:canvas.height}; // done
+                    const topLeft={x:0,y:0}; // done
+                    const topRight={x:canvas.width,y:0};
+        
+                    const center={x:lerp(topLeft.x,bottomRight.x,1/2),y:lerp(topLeft.y,bottomRight.y,1/2)};
+        
+        
+                    animate();
+        
+                    function animate(){
+                        ctx.clearRect(0,0,canvas.width,canvas.height);
+        
+                        const sec=new Date().getTime()/1000;
+                        const t=(Math.sin(sec)+1)/2;
+                        const u=(Math.sin(sec)-1)/2;
+        
+                        const C={x:lerp(center.x,topRight.x,t),y:lerp(center.y,topRight.y,t)};
+                        const D={x:lerp(topLeft.x,center.x,t),y:lerp(topLeft.y,center.y,t)};
+                        const E={x:lerp(center.x,bottomLeft.x,t),y:lerp(center.y,bottomLeft.y,t)};
+                        const F={x:lerp(bottomRight.x,center.x,t),y:lerp(bottomRight.y,center.y,t)};
+        
+        
+                        drawLine(C,D);
+                        drawLine(D,E);
+                        drawLine(E,F);
+                        drawLine(F,C);
+                        drawText(topLeft,topRight)
+
+                        drawDashedLine(topLeft,center)
+                        drawDashedLine(bottomLeft,center)
+                        drawDashedLine(center,topRight)
+                        drawDashedLine(center,bottomRight)
+                        // drawLine(E,F);
+        
+                        drawDot(C);
+                        drawDot(D);
+                        drawDot(E);
+                        drawDot(F);
+
+
+                        drawDot(vlerp(D,C,t));
+                        drawDot(vlerp(D,E,t));
+                        drawDot(vlerp(F,E,t));
+                        drawDot(vlerp(F,C,t));
+                        // drawDot(vlerp(E,F,t));
+                        // drawDot(vlerp(F,E,t));
+        
+                        //drawDot(E);
+                        //drawDot(F);
+        
+        
+        
+                        drawDot(topLeft);
+                        drawDot(bottomRight);
+                        drawDot(bottomLeft);
+                        drawDot(topRight);
+                        drawDot(center)
+        
+        
+                        requestAnimationFrame(animate);
+                    }
+        
+        
+                    function drawDot(pos){
+                        ctx.setLineDash([]);
+                        ctx.beginPath();
+                        ctx.fillStyle="white";
+                        ctx.strokeStyle="black";
+                        ctx.arc(pos.x,pos.y,10,0,Math.PI*2);
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+        
+                    function drawLine(A,B){
+                        ctx.setLineDash([]);
+                        ctx.beginPath();
+                        ctx.moveTo(A.x,A.y);
+                        ctx.lineTo(B.x,B.y);
+                        ctx.stroke();
+                    }
+        
+                      // linear interpolation on two dimensional plane
+                    function vlerp(X,Y,t){
+                        return {x:lerp(X.x,Y.x,t),y:lerp(X.y,Y.y,t)}
+                    }
+        
+                    function drawDashedLine(A,B){
+                        ctx.beginPath();
+                        ctx.setLineDash([10,10]);
+                        ctx.moveTo(A.x,A.y);
+                        ctx.lineTo(B.x,B.y);
+                        ctx.stroke();
+                    }
+        
+        
+                    function drawText(A,B){
+        
+                        ctx.fillStyle="black";
+                        ctx.textBaseline="middle";
+                        ctx.textAlign="center";
+                        ctx.fillText("",lerp(A.x,B.x,1/2),B.y+25);
+                        ctx.font="bold 25px Arial";
+                    }
+
+                    function lerp(A,B,t){
+                        return A+(B-A)*t;
+                    }
+                </script>
+
+                <!-- <h1>thlurte</h1> -->
+                <!-- <p class="darkerText">building autonomous structures</p> -->
             </div>
-            <div class="statsContainer">
-                <div class="imgContainer">
-                    <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png"
-                        alt="profile-img" />
-                </div>
-                <div class="stats darkerText">
-                    <div>
-                        <div>
-
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="">16 GitHub Repositories</p>
-                    </div>
-                    <div>
-                        <div>
-
-                            <i class="fa-brands fa-github"></i>
-                        </div>
-                        <p class="">19 Followers</p>
-                    </div>
-                    <div>
-                        <div>
-
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                        </div>
-                        <p class="">35 Commits This Year</p>
-                    </div>
-                </div>
-            </div>
+           
             <p class="aboutMe">Hi, I'm thlurte, a student based in Sri Lanka, studying at the Open University of Sri Lanka. I am devoted to studying and developing structures that synthesize computational intelligence.  </p>
             <div>
                 <a href="mailto:thlurte@gmail.com" class="outreach darkerText">
